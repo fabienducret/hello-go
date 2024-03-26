@@ -6,16 +6,14 @@ import (
 	"testing"
 )
 
-type StubDecoration struct{}
-
-func (d StubDecoration) ApplyTo(value string) string {
+func stubDecorate(value string) string {
 	return fmt.Sprintf("--> %s <--", value)
 }
 
 func TestGrettings(t *testing.T) {
 
 	t.Run("say hello to name", func(t *testing.T) {
-		sayHelloTo := grettings.SayHelloWith(StubDecoration{})
+		sayHelloTo := grettings.SayHelloWith(stubDecorate)
 		want := "--> Hello Fabien <--"
 
 		got, _ := sayHelloTo("Fabien")
@@ -26,7 +24,7 @@ func TestGrettings(t *testing.T) {
 	})
 
 	t.Run("get error for empty name", func(t *testing.T) {
-		sayHelloTo := grettings.SayHelloWith(StubDecoration{})
+		sayHelloTo := grettings.SayHelloWith(stubDecorate)
 
 		_, err := sayHelloTo("")
 

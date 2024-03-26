@@ -11,16 +11,13 @@ import (
 func main() {
 	name, err := askForName()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		handleError(err)
 	}
 
-	decoration := grettings.StyleDecoration{}
-	sayHelloTo := grettings.SayHelloWith(decoration)
+	sayHelloTo := grettings.SayHelloWith(grettings.StyleDecorate)
 	toDisplay, err := sayHelloTo(name)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		handleError(err)
 	}
 
 	fmt.Println(toDisplay)
@@ -36,4 +33,9 @@ func askForName() (string, error) {
 	}
 
 	return strings.TrimSuffix(input, "\n"), nil
+}
+
+func handleError(err error) {
+	fmt.Println(err)
+	os.Exit(1)
 }
