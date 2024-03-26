@@ -2,20 +2,25 @@ package grettings
 
 import "fmt"
 
-type SayHello func(string) (string, error)
-
 type Decorate func(value string) string
 
-func SayHelloWith(decorate Decorate) SayHello {
+type GetNameRepository func() (string, error)
+
+func SayHelloWith(decorate Decorate, getName GetNameRepository) func() (string, error) {
 	sayHelloTo := func(name string) string {
 		hello := fmt.Sprintf("Hello %s", name)
 
 		return decorate(hello)
 	}
 
-	return func(name string) (string, error) {
+	return func() (string, error) {
+		name, err := getName()
+		if err != nil {
+			return "", fmt.Errorf("SayHello: error on getName")
+		}
+
 		if name == "" {
-			return "", fmt.Errorf("empty name")
+			return "", fmt.Errorf("SayHello: empty name")
 		}
 
 		return sayHelloTo(name), nil
